@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         Queen Reporter
 // @namespace    https://github.com/geisterfurz007
-// @version      0.8.3
+// @version      0.8.4
 // @description  Quick feedback to Heat Detector
 // @author       geisterfurz007
 // @include	 https://stackoverflow.com/*
@@ -149,17 +149,20 @@ function validateFeedbackRequired(commentUrl, feedback, commentId) {
 	if (feedback === "tp")
 		return sendFeedback();
 	
+	let fullURL = "http://api.higgs.sobotics.org/Reviewer/v2/Check?contentId=" + commentId + "&contentSite=" + (new URL(commentUrl)).host + "&contentType=comment"
+	console.log(fullURL);
+	
 	GM.xmlHttpRequest({
 		method: "GET",
-		url: "http://api.higgs.sobotics.org/Reviewer/Check?contentUrl=" + encodeURIComponent(commentUrl),
+		url: fullURL,
 		headers: { "Content-Type": "application/x-www-form-urlencoded" },
 //		data: "contentUrl=" + encodeURIComponent(commentUrl),
 		onload: function (r) {
 			let reports = JSON.parse(r.responseText);
+			console.log(reports);
 			if (reports.length > 0 && reports.some(report => report.dashboard === "Hydrant")) {
 				sendFeedback();
-			}
-			else {
+			} else {
 				displayToaster("Feedback not needed.", "#E4EB31");
 			}
 		}
