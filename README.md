@@ -10,18 +10,27 @@ Follow the browser-specific instructions below. If you installed it correctly, a
 
 When you click on it, you can give a quick feedback in the popup. This will NOT flag the post accordingly!
 
-![](https://i.imgur.com/p4q0Zks.jpg)
+![](https://i.imgur.com/SPgSin9.jpg)
 
 Further automatic feedback will be sent when flagging a comment. Choosing one using the icon is not necessary after!  
-When flagging a post as "No longer needed", a dialog will show up asking whether nc should be sent or not (in which case fp will be sent).  
-This dialog was introduced (quite a bit) after and because of this message: https://chat.stackoverflow.com/transcript/message/42821649#42821649
+Currently the automatic feedback is as follows:
+
+Flagname | Feedback sent
+---------|--------------
+harassment/bigotry/abuse | tp
+unfriendly or unkind | nc
+no longer needed | fp
+something else | -
+
+The flagging dialog contains a checkbox that can be used to disable automatic feedback for that comment:
+
+![](https://i.imgur.com/SzBOJb1.jpg)
 
 ### Chrome / Firefox
 
 1. Install TamperMonkey [for Chrome](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)  / [for Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) or [Greasemonkey for FF](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
 2. Click to [install](https://github.com/geisterfurz007/QueenReporter/raw/master/QueenReporter.user.js)
 3. Tampermonkey/Greasemonkey should open up and give you the option to install the extension
-4. _(Optional)_ If you have SO-chat open, reload the page
 
 ## Notes
 
@@ -30,4 +39,5 @@ This was written and tested with Tampermonkey 4.6.5757. If you are using Greasem
 ## Todo
 
  - [x] Get consent about positioning of the icon and move if needed
- - [ ] Only show icon when the mouse is over the comment like upvote and flag icon
+ - [X] Only show icon when the mouse is over the comment like upvote and flag icon (All other icons are now always visble as well. Thanks SO!)
+ 
