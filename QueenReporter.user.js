@@ -95,7 +95,8 @@ function addFlagIdListener(preSelector) {
 
 				if (nodeArray.some(node => node.classList.contains("s-modal-overlay"))) {
 					$("#modal-base div.ai-center button.js-modal-close")
-						.after($("<label><input id='queenAutoFeedbackEnabled' type='checkbox' checked='checked'>Queen Autofeedback enabled</label>"));
+						.after($("<label><input id='queenAutoFeedbackEnabled' type='checkbox' checked='checked'>Queen Autofeedback enabled</label>"+
+								 "<label><input id='queenFeatureThanksPopupRemovalEnabled' type='checkbox' checked='checked'>Popup removal enabled</label>"));
 
 					observer.disconnect();
 				}
@@ -110,7 +111,6 @@ function addFlagIdListener(preSelector) {
 			  , characterData: false
 		});
 
-        addPopupListener();
 	});
 }
 
@@ -151,6 +151,10 @@ function checkReport(event) {
 		return;
 	}
 
+	if ($("#queenFeatureThanksPopupRemovalEnabled").is(":checked")) {
+	    addPopupListener();
+	}
+	
 	let results = $("input[name='comment-flag-type']:checked");
 	if (results.length > 0) {
 		let link = getCommentUrl(commentId);
