@@ -58,8 +58,7 @@ function addPopupListener() {
 			if (!mutation.addedNodes) return;
 
 			let nodeArray = Array.from(mutation.addedNodes);
-            console.log("Added nodes", nodeArray);
-			if (nodeArray.some(matchCommentFlagPopupCriteria)) {
+            if (nodeArray.some(matchCommentFlagPopupCriteria)) {
                 $(".js-stacks-managed-popup").remove();
 				observer.disconnect();
 			}
@@ -182,8 +181,7 @@ function validateFeedbackRequired(commentUrl, feedback, commentId) {
 		return sendFeedback();
 
 	let fullURL = "http://api.higgs.sobotics.org/Reviewer/v2/Check?contentId=" + commentId + "&contentSite=" + (new URL(commentUrl)).host + "&contentType=comment"
-	console.log(fullURL);
-
+	
 	GM.xmlHttpRequest({
 		method: "GET",
 		url: fullURL,
@@ -191,7 +189,6 @@ function validateFeedbackRequired(commentUrl, feedback, commentId) {
 //		data: "contentUrl=" + encodeURIComponent(commentUrl),
 		onload: function (r) {
 			let reports = JSON.parse(r.responseText);
-			console.log(reports);
 			if (reports.length > 0 && reports.some(report => report.dashboard === "Hydrant")) {
 				sendFeedback();
 			} else {
