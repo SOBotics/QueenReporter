@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         Queen Reporter
 // @namespace    https://github.com/geisterfurz007
-// @version      0.8.4
+// @version      0.9
 // @description  Quick feedback to Heat Detector
 // @author       geisterfurz007
 // @include	 https://stackoverflow.com/*
@@ -49,37 +49,69 @@ let commentId = undefined;
 	//When comments are loaded because a new one is added, there are more than a few comments or a comment was posted at the bottom of a longer thread, the whole comment section is reloaded causing the icon to be removed
 	//Because of that we need another request listener that checks when the comments for a certain post are requested so they can be added after that.
     addXHRListener(checkCommentReload);
+
 })();
+
+function addPopupListener() {
+	let observer = new MutationObserver(mutations => {
+		mutations.forEach(mutation => {
+			if (!mutation.addedNodes) return;
+
+			let nodeArray = Array.from(mutation.addedNodes);
+            console.log("Added nodes", nodeArray);
+			if (nodeArray.some(matchCommentFlagPopupCriteria)) {
+                $(".js-stacks-managed-popup").remove();
+				observer.disconnect();
+			}
+		})
+	});
+
+	observer.observe(document.body, {
+			  childList: true
+			  , subtree: true
+			  , attributes: false
+			  , characterData: false
+	});
+}
+
+function matchCommentFlagPopupCriteria(node) {
+    let matches = true;
+    matches &= node.classList && node.classList.contains("js-stacks-managed-popup");
+    let jqText = $(node).text();
+    matches &= !!jqText && jqText.trim().indexOf("Thanks for flagging") > -1;
+    return matches;
+}
 
 function addFlagIdListener(preSelector) {
 	preSelector = (preSelector || "").trim() + " ";
-	
+
 	$(preSelector + "div.comment-flagging").click(function(ev) {
 		commentId = $(ev.target).parents("li.comment").attr("data-comment-id");
-		
+
 		let observer = new MutationObserver(mutations => {
 			mutations.forEach(mutation => {
 				if (!mutation.addedNodes) return;
-				
-				let nodeArray = Array.from(mutation.addedNodes); 
-				
+
+				let nodeArray = Array.from(mutation.addedNodes);
+
 				if (nodeArray.some(node => node.classList.contains("s-modal-overlay"))) {
 					$("#modal-base div.ai-center button.js-modal-close")
 						.after($("<label><input id='queenAutoFeedbackEnabled' type='checkbox' checked='checked'>Queen Autofeedback enabled</label>"));
-						
+
 					observer.disconnect();
 				}
-				
+
 			})
 		});
-		
+
 		observer.observe(document.body, {
 			  childList: true
 			  , subtree: true
 			  , attributes: false
 			  , characterData: false
 		});
-		
+
+        addPopupListener();
 	});
 }
 
@@ -101,7 +133,7 @@ function checkPopup(xhr) {
 	let matches = /flags\/comments\/\d+\/popup\?_=\d+/.exec(xhr.responseURL);
 	if (matches !== null && xhr.status === 200) {
 		$(".js-modal-submit").on("click", checkReport);
-	}
+    }
 }
 
 function checkCommentReload(xhr) {
@@ -119,7 +151,7 @@ function checkReport(event) {
 	if (!$("#queenAutoFeedbackEnabled").is(":checked")) {
 		return;
 	}
-	
+
 	let results = $("input[name='comment-flag-type']:checked");
 	if (results.length > 0) {
 		let link = getCommentUrl(commentId);
@@ -128,7 +160,7 @@ function checkReport(event) {
 			validateFeedbackRequired(link, "tp", commentId);
 		} else if (flagName.indexOf("Unwelcoming") > -1) {
 			validateFeedbackRequired(link, "nc", commentId);
-		} else if (flagName.indexOf("NoLongerNeeded") > -1) { //Modflag shouldn't really feedback fp; 
+		} else if (flagName.indexOf("NoLongerNeeded") > -1) { //Modflag shouldn't really feedback fp;
 			validateFeedbackRequired(link, "fp", commentId);
 		}
 	}
@@ -148,10 +180,10 @@ function validateFeedbackRequired(commentUrl, feedback, commentId) {
 
 	if (feedback === "tp")
 		return sendFeedback();
-	
+
 	let fullURL = "http://api.higgs.sobotics.org/Reviewer/v2/Check?contentId=" + commentId + "&contentSite=" + (new URL(commentUrl)).host + "&contentType=comment"
 	console.log(fullURL);
-	
+
 	GM.xmlHttpRequest({
 		method: "GET",
 		url: fullURL,
@@ -238,7 +270,7 @@ function getDDWithText(report, description) {
 
 function addSnack(message, isSuccessMessage) {
 	let color = "#" + (isSuccessMessage ? "00690c" : "ba1701");  //padding 10px
-	
+
 	displayToaster(message, color);
 }
 
@@ -270,7 +302,7 @@ function displayToaster(message, colour, textColour, duration) {
 	let popupDelay = 2000;
 	let toasterTimeout = null;
 	let toasterFadeTimeout = null;
-	
+
 	let div = $('<div>')
 		.css({
 		'background-color': colour,
