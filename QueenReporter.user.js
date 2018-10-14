@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Queen Reporter
-// @version      0.9
+// @version      0.9.1
 // @namespace    https://github.com/SOBotics
 // @description  Quick feedback to Heat Detector
 // @author       geisterfurz007
@@ -93,7 +93,7 @@ function addFlagIdListener(preSelector) {
 
 				let nodeArray = Array.from(mutation.addedNodes);
 
-				if (nodeArray.some(node => node.classList.contains("s-modal-overlay"))) {
+				if (nodeArray.some(node => node.classList.contains("s-modal-overlay")) && $("#queenAutoFeedbackEnabled").length == 0) {
 					$("#modal-base div.ai-center button.js-modal-close")
 						.after($("<label><input id='queenAutoFeedbackEnabled' type='checkbox' checked='checked'>Queen Autofeedback enabled</label>"+
 								 "<label><input id='queenFeatureThanksPopupRemovalEnabled' type='checkbox' checked='checked'>Popup removal enabled</label>"));
