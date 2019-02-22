@@ -370,6 +370,10 @@ function constructFlagOption(smolText, bigText, value) {
 	const inputDiv = $("<div>").addClass('grid--cell');
 	const radioId = "CustomQueenOption-" + value;
 	const radioButton = $("<input>").addClass('s-radio').addClass('m0').attr("type", "radio").attr("id", radioId).attr('name', 'comment-flag-type').attr('value', value);
+	
+	radioButton.click(() => {
+		$(".js-modal-submit.disabled-button").prop("disabled", false).removeClass("disabled-button");
+	});
 
 	inputDiv.append(radioButton);
 	subGrid.append(inputDiv);
