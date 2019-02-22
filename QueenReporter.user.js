@@ -209,7 +209,7 @@ function getCommentUrl(commentId) {
 function validateFeedbackRequired(commentUrl, feedback, commentId) {
 
 	function sendFeedback() {
-		sendChatMessage("Currently testing a new feature. Feedback: " + feedback/*feedbackString + commentUrl + " " + feedback*/, r => handleResponse(r, commentId));
+		sendChatMessage(feedbackString + commentUrl + " " + feedback, r => handleResponse(r, commentId));
 	}
 
 	if (feedback === "tp")
