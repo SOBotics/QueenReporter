@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Queen Reporter
-// @version      0.10.0
+// @version      0.10.1
 // @namespace    https://github.com/SOBotics
 // @description  Quick feedback to Heat Detector
 // @author       geisterfurz007
@@ -11,7 +11,7 @@
 // @updateURL https://github.com/SOBotics/QueenReporter/raw/master/QueenReporter.meta.js
 // ==/UserScript==
 
-const room = 167908; //111347;
+const room = 111347;
 const test_room = 167908;
 
 const feedbackString = "@Queen feedback ";
