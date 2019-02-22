@@ -11,7 +11,7 @@
 // @updateURL https://github.com/SOBotics/QueenReporter/raw/master/QueenReporter.meta.js
 // ==/UserScript==
 
-const room = 111347;
+const room = 167908; //111347;
 const test_room = 167908;
 
 const feedbackString = "@Queen feedback ";
@@ -115,6 +115,18 @@ function addFlagIdListener(preSelector) {
 
 					$("#modal-description > div").append(customIssue6Option);
 
+					//Manipulate ajax. If the url matches the regex to flag but ends in undefined that means that the custom flag was used.
+					//In that case replace undefined with the value indicating a NLN flag.
+					$.ajaxSetup({
+						beforeSend: function (xhr,settings) {
+							const url = settings.url;
+							if (url.match(/\/flags\/comments\/\d+\/add\/undefined/) !== null) {
+								settings.url = url.substring(0, url.length - "undefined".length) + customIssue6OptionValue.toString();
+							}
+							return true;
+						}
+					});
+
 					observer.disconnect();
 				}
 
@@ -182,6 +194,8 @@ function checkReport(event) {
 			validateFeedbackRequired(link, "nc", commentId);
 		} else if (flagName.indexOf("NoLongerNeeded") > -1) { //Modflag shouldn't really feedback fp;
 			validateFeedbackRequired(link, "fp", commentId);
+		} else if (flagName.indexOf("Custom") > -1) {
+			validateFeedbackRequired(link, "nc", commentId);
 		}
 	}
 }
@@ -195,7 +209,7 @@ function getCommentUrl(commentId) {
 function validateFeedbackRequired(commentUrl, feedback, commentId) {
 
 	function sendFeedback() {
-		sendChatMessage(feedbackString + commentUrl + " " + feedback, r => handleResponse(r, commentId));
+		sendChatMessage("Currently testing a new feature. Feedback: " + feedback/*feedbackString + commentUrl + " " + feedback*/, r => handleResponse(r, commentId));
 	}
 
 	if (feedback === "tp")
@@ -215,6 +229,9 @@ function validateFeedbackRequired(commentUrl, feedback, commentId) {
 			} else {
 				displayToaster("Feedback not needed.", "#E4EB31");
 			}
+
+			//Clean up the manipulated ajax call
+			$.ajaxSetup({ beforeSend: undefined });
 		}
 	});
 }
@@ -358,11 +375,11 @@ function constructFlagOption(smolText, bigText, value) {
 	subGrid.append(inputDiv);
 
 	const textDiv = $("<div>").addClass('grid--cell').addClass('fl1');
-	const shortText = $("<label>").addClass('d-block').addClass('mb4').addClass('s-label').addClass('fw-normal').attr('for', radioId.toString()).text(smolText);
+	const shortText = $("<label>").addClass('d-block').addClass('mb4').addClass('s-label').addClass('fw-normal').attr('for', radioId).text(smolText);
 
-	const longText = $("<label>").addClass('d-block').addClass('mb12').addClass('s-description').addClass('c-pointer').attr('for', radioId.toString()).text(bigText);
+	const longText = $("<label>").addClass('d-block').addClass('mb12').addClass('s-description').addClass('c-pointer').attr('for', radioId).text(bigText);
 
-	textDiv.append(shortText).append(bigText);
+	textDiv.append(shortText).append(longText);
 	subGrid.append(textDiv);
 	item.append(subGrid);
 
