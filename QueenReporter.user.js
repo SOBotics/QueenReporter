@@ -147,12 +147,12 @@ function checkCommentReload(xhr) {
 }
 
 function checkReport(event) {
-	if (!$("#queenAutoFeedbackEnabled").is(":checked")) {
-		return;
-	}
-
 	if ($("#queenFeatureThanksPopupRemovalEnabled").is(":checked")) {
 	    addPopupListener();
+	}
+
+	if (!$("#queenAutoFeedbackEnabled").is(":checked")) {
+		return;
 	}
 	
 	let results = $("input[name='comment-flag-type']:checked");
