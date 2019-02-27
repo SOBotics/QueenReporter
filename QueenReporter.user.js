@@ -22,6 +22,10 @@ let commentId = undefined;
 
 	'use strict';
 
+	//When comments are loaded because a new one is added, there are more than a few comments or a comment was posted at the bottom of a longer thread, the whole comment section is reloaded causing the icon to be removed
+	//Because of that we need another request listener that checks when the comments for a certain post are requested so they can be added after that.
+    addXHRListener(checkCommentReload);
+
 	if (typeof GM !== 'object') {
 		GM = {};
 	}
@@ -45,10 +49,6 @@ let commentId = undefined;
 
     //Listener to react to the opened comment flagging popup
 	addXHRListener(checkPopup);
-
-	//When comments are loaded because a new one is added, there are more than a few comments or a comment was posted at the bottom of a longer thread, the whole comment section is reloaded causing the icon to be removed
-	//Because of that we need another request listener that checks when the comments for a certain post are requested so they can be added after that.
-    addXHRListener(checkCommentReload);
 
 })();
 
@@ -165,7 +165,11 @@ function checkPopup(xhr) {
 }
 
 function checkCommentReload(xhr) {
-    let matches = /posts\/(\d+)\/comments(\?_=\d+)?/.exec(xhr.responseURL);
+	console.log("New request made to " + xhr.responseURL + ", checking if it reloads comments");
+
+	let matches = /posts\/(\d+)\/comments(\?_=\d+)?/.exec(xhr.responseURL);
+	console.log("	Request matches comment reload regex!");
+
     if (matches !== null && xhr.status === 200) {
 		let postId = matches[1];
 		let post = document.getElementById("answer-" + postId) || document.getElementById("question");
