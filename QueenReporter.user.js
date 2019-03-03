@@ -19,6 +19,10 @@ const feedbackString = "@Queen feedback ";
 let commentId = undefined;
 
 (function() {
+	window.addEventListener('load', setup);
+})();
+
+function setup() {
 
 	'use strict';
 
@@ -50,7 +54,7 @@ let commentId = undefined;
     //Listener to react to the opened comment flagging popup
 	addXHRListener(checkPopup);
 
-})();
+};
 
 function addPopupListener() {
 	let observer = new MutationObserver(mutations => {
