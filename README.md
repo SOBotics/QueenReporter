@@ -29,15 +29,9 @@ The flagging dialog contains a checkbox that can be used to disable automatic fe
 ### Chrome / Firefox
 
 1. Install TamperMonkey [for Chrome](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)  / [for Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) or [Greasemonkey for FF](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
-2. Click to [install](https://github.com/geisterfurz007/QueenReporter/raw/master/QueenReporter.user.js)
+2. Click to [install](https://github.com/SOBotics/QueenReporter/raw/master/QueenReporter.user.js)
 3. Tampermonkey/Greasemonkey should open up and give you the option to install the extension
 
 ## Notes
 
 This was written and tested with Tampermonkey 4.6.5757. If you are using Greasemonkey, please inform me about possible issues and I will see if I can get it fixed.
-
-## Todo
-
- - [x] Get consent about positioning of the icon and move if needed
- - [X] Only show icon when the mouse is over the comment like upvote and flag icon (All other icons are now always visble as well. Thanks SO!)
- 
