@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Queen Reporter
-// @version      0.10.1
+// @version      0.10.2
 // @namespace    https://github.com/SOBotics
 // @description  Quick feedback to Heat Detector
 // @author       geisterfurz007
