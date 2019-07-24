@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Queen Reporter
-// @version      0.10.2
+// @version      0.10.3
 // @namespace    https://github.com/SOBotics
 // @description  Quick feedback to Heat Detector
 // @author       geisterfurz007
@@ -23,7 +23,7 @@ let commentId = undefined;
 	'use strict';
 
 	if (typeof GM !== 'object') {
-		var GM = {};
+		window.GM = {};
 	}
 
 	if (typeof GM_xmlhttpRequest === 'function' && !GM.xmlHttpRequest) {
