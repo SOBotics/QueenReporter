@@ -30,6 +30,8 @@ let commentId = undefined;
 		GM.xmlHttpRequest = GM_xmlhttpRequest;
 	}
 
+	GM_addStyle(".s-modal--dialog { max-width: 750px !important; }");
+
 	addFlagIdListener();
 
     //Listener to react to the opened comment flagging popup
@@ -84,9 +86,10 @@ function addFlagIdListener(preSelector) {
 
 				if (nodeArray.some(node => node.classList.contains("js-modal-overlay")) && $("#queenAutoFeedbackEnabled").length == 0) {
 					$("#modal-base div.ai-center button.js-modal-close")
-						.after($("<label><input id='queenAutoFeedbackEnabled' type='checkbox' checked='checked'>Queen Autofeedback enabled</label>"+
-								 "<label><input id='queenFeatureThanksPopupRemovalEnabled' type='checkbox' checked='checked'>Popup removal enabled</label>"));
+						.after($("<label style='margin: 6px;'><input id='queenFeatureThanksPopupRemovalEnabled' type='checkbox' checked='checked'>Popup removal enabled</label>"));
 					
+					addFeedbacks();
+
 					//Manipulate ajax. If the url matches the regex to flag but ends in undefined that means that the custom flag was used.
 					
 
@@ -104,6 +107,34 @@ function addFlagIdListener(preSelector) {
 		});
 
 	});
+}
+
+/*
+
+`
+<div id="queen-feedback-container">
+	Reported by Queen!
+	<br>
+	Feedback: 
+	<select id="queen-selected-feedback" style="margin-top: 5px;">
+		<option value="tp">tp</option>
+		...
+	</select>
+
+</div>
+`
+
+*/
+
+function addFeedbacks() {
+	const structure = $("<div style='margin-right: 10px;'>Reported by Queen!<br>Feedback: <select id='queen-selected-feedback' style='margin-top: 5px;'></select></div>");
+	$("#modal-base div.ai-center button.js-modal-close").after(structure);
+
+	const toOption = value => $(`<option value="${value}">${value}</option>`);
+
+	["tp", "nc", "fp", "sk", "None"]
+		.map(toOption)
+		.forEach(option => $("#queen-selected-feedback").append(option));
 }
 
 function addXHRListener(callback) {
