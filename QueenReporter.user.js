@@ -30,16 +30,7 @@ let commentId = undefined;
 		GM.xmlHttpRequest = GM_xmlhttpRequest;
 	}
 
-	window.addEventListener("click", ev => {
-        if (ev.target.classList.contains("comment-queen-feedback-icon")) {
-            ev.target.classList.toggle("queen-popup-closed");
-			commentId = $(ev.target).parents("li.comment").attr("data-comment-id");
-        } else {
-            $(".comment-queen-feedback-icon").addClass("queen-popup-closed");
-        }
-    });
 	addFlagIdListener();
-    addQuickFeedback();
 
     //Listener to react to the opened comment flagging popup
 	addXHRListener(checkPopup);
@@ -96,19 +87,8 @@ function addFlagIdListener(preSelector) {
 						.after($("<label><input id='queenAutoFeedbackEnabled' type='checkbox' checked='checked'>Queen Autofeedback enabled</label>"+
 								 "<label><input id='queenFeatureThanksPopupRemovalEnabled' type='checkbox' checked='checked'>Popup removal enabled</label>"));
 					
-					$("#modal-description > div").append(customIssue6Option);
-
 					//Manipulate ajax. If the url matches the regex to flag but ends in undefined that means that the custom flag was used.
-					//In that case replace undefined with the value indicating a NLN flag.
-					$.ajaxSetup({
-						beforeSend: function (xhr,settings) {
-							const url = settings.url;
-							if (url.match(/\/flags\/comments\/\d+\/add\/undefined/) !== null) {
-								settings.url = url.substring(0, url.length - "undefined".length) + customIssue6OptionValue.toString();
-							}
-							return true;
-						}
-					});
+					
 
 					observer.disconnect();
 				}
@@ -232,11 +212,9 @@ function sendChatMessage(msg, cb) {
   });
 }
 
-function handleResponse(r, commentId) {
-	if (r.status === 200) {
+function handleResponse(r) {
+	if (r.status === 200)
 		addSnack("Reported to Queen!", true);
-		$("#comment-" + commentId + " .comment-queen-feedback-icon").addClass("queen-feedback-sent");
-	}
 	else
 		addSnack("Failed to report!", false);
 }
