@@ -90,9 +90,7 @@ function addFlagIdListener(preSelector) {
 					
 					
 					conditionallyAddFeedbacks(commentId);
-
-					//Manipulate ajax. If the url matches the regex to flag but ends in undefined that means that the custom flag was used.
-					
+					addRadioListeners(); //hehe, get it? Because you can listen to radio?
 
 					observer.disconnect();
 				}
@@ -141,6 +139,20 @@ function conditionallyAddFeedbacks(commentId) {
 			}
 		}
 	});
+}
+
+function addRadioListeners() {
+	$("[id^='comment-flag-type-']").click(ev => {
+		const id = ev.target.id;
+		const select = $('#queen-selected-feedback');
+		if (id.indexOf('Rude') > -1) {
+			select.val('tp');
+		} else if (id.indexOF('Unwelcoming') > -1) {
+			select.val('nc');
+		} else if (id.indexOf('NoLongerNeeded') > -1) {
+			select.val('fp');
+		}
+	})
 }
 
 function addFeedbacks() {
@@ -197,7 +209,6 @@ function checkReport(event) {
 		validateFeedbackRequired(link, selectedFeedback, commentId);
 	}
 }
-
 
 function getCommentUrl(commentId) {
 	let id = "#comment-"+commentId;
