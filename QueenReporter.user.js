@@ -30,8 +30,6 @@ let commentId = undefined;
 		GM.xmlHttpRequest = GM_xmlhttpRequest;
 	}
 
-	GM_addStyle(".comment-queen-feedback-icon::after {content: \"🐝\"} .comment-queen-feedback-icon.queen-feedback-sent::after {content: \"🍯\"} .comment-queen-feedback-icon dl {display: inline-block} .comment-queen-feedback-icon.queen-popup-closed dl {display:none}");
-
 	window.addEventListener("click", ev => {
         if (ev.target.classList.contains("comment-queen-feedback-icon")) {
             ev.target.classList.toggle("queen-popup-closed");
@@ -141,12 +139,6 @@ function addFlagIdListener(preSelector) {
 		});
 
 	});
-}
-
-function addQuickFeedback(preSelector) {
-	preSelector = preSelector || "";
-	preSelector = preSelector.trim() + " ";
-    $(preSelector + ".comment-actions > div:nth-child(2)").after(getQueenFeedbackElement);
 }
 
 function addXHRListener(callback) {
@@ -262,45 +254,6 @@ function handleResponse(r, commentId) {
 	}
 	else
 		addSnack("Failed to report!", false);
-}
-
-function getQueenFeedbackElement() {
-	let div = document.createElement("div");
-	let anchor = document.createElement("a");
-	anchor.classList.add("comment-queen-feedback-icon", "queen-popup-closed");
-
-	//For onHover; I might add a checkbox somewhere where one can choose to have it onHover/onClick
-	//anchor.addEventListener("mouseover", () => anchor.classList.add("queen-popup-closed"));
-	//anchor.addEventListener("mouseout", () => anchor.classList.add("queen-popup-closed"));
-
-	let dl = document.createElement("dl");
-	dl.style = "margin: 0px; z-index: 1; position: absolute; white-space: nowrap; background: rgb(255, 255, 255) none repeat scroll 0% 0%; padding: 5px; border: 1px solid rgb(159, 166, 173); box-shadow: rgba(36, 39, 41, 0.3) 0px 2px 4px; cursor: default;";
-
-	let options = getOptions();
-	options.forEach(o => dl.appendChild(getDDWithText(o.report, o.desc)));
-
-	anchor.appendChild(dl);
-
-	div.appendChild(anchor);
-	return div;
-}
-
-function getDDWithText(report, description) {
-	let result = document.createElement("dd");
-	result.style = "padding-left: 5px; padding-right: 5px;";
-
-	let anchor = document.createElement("a");
-	anchor.style = "display: inline-block; margin-top: 5px; width: auto;";
-	anchor.innerText = description;
-
-	anchor.addEventListener("click", ev => {
-		let cId = $(ev.target).parents(".comment").attr("data-comment-id");
-		validateFeedbackRequired(getCommentUrl(cId), report, cId);
-		//sendChatMessage(feedbackString + getCommentUrl(cId) + " " + report);
-	});
-
-	result.appendChild(anchor);
-	return result;
 }
 
 function addSnack(message, isSuccessMessage) {
