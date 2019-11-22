@@ -217,6 +217,9 @@ function getCommentUrl(commentId) {
 
 function validateFeedbackRequired(commentUrl, feedback, commentId) {
 
+	if (feedback === 'None')
+		return;
+
 	function sendFeedback() {
 		sendChatMessage(feedbackString + commentUrl + " " + feedback, r => handleResponse(r, commentId));
 	}
