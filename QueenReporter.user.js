@@ -175,16 +175,9 @@ function checkReport(event) {
 	let results = $("input[name='comment-flag-type']:checked");
 	if (results.length > 0) {
 		let link = getCommentUrl(commentId);
-		let flagName = results[0].id;
-		if (flagName.indexOf("Rude") > -1) {
-			validateFeedbackRequired(link, "tp", commentId);
-		} else if (flagName.indexOf("Unwelcoming") > -1) {
-			validateFeedbackRequired(link, "nc", commentId);
-		} else if (flagName.indexOf("NoLongerNeeded") > -1) { //Modflag shouldn't really feedback fp;
-			validateFeedbackRequired(link, "fp", commentId);
-		} else if (flagName.indexOf("Custom") > -1) {
-			validateFeedbackRequired(link, "nc", commentId);
-		}
+		const selectedFeedback = $('#queen-selected-feedback').val()
+
+		validateFeedbackRequired(link, selectedFeedback, commentId);
 	}
 }
 
