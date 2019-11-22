@@ -96,21 +96,6 @@ function addFlagIdListener(preSelector) {
 						.after($("<label><input id='queenAutoFeedbackEnabled' type='checkbox' checked='checked'>Queen Autofeedback enabled</label>"+
 								 "<label><input id='queenFeatureThanksPopupRemovalEnabled' type='checkbox' checked='checked'>Popup removal enabled</label>"));
 					
-					const customIssue6OptionValue = $("#comment-flag-type-CommentNoLongerNeeded").attr("value");
-					
-					console.log(customIssue6OptionValue);
-
-					//In this case the selector for NLN flag value is broken; do not show the custom flag anymore because that would attempt a flag with "undefined" as value.
-					if (customIssue6OptionValue === undefined) {
-						return;
-					}
-
-					const customIssue6Option = constructFlagOption(
-						"Not so nice but flag no longer needed",
-						"This is a custom option provided by QueenReporter! The comment will be flagged as \"no longer needed\" while the feedback is going to be \"nc\"",
-						customIssue6OptionValue
-					)
-
 					$("#modal-description > div").append(customIssue6Option);
 
 					//Manipulate ajax. If the url matches the regex to flag but ends in undefined that means that the custom flag was used.
@@ -316,32 +301,3 @@ function displayToaster(message, colour, textColour, duration) {
 	}
 	toasterTimeout = setTimeout(hidePopup, duration === undefined ? popupDelay : duration);
 }
-
-function constructFlagOption(smolText, bigText, value) {
-	const item = $("<div>").addClass('grid--cell').addClass('js-comment-flag-option');
-	const subGrid = $("<div>").addClass('grid').addClass('gs8').addClass('gsx');
-	const inputDiv = $("<div>").addClass('grid--cell');
-	const radioId = "CustomQueenOption-" + value;
-	const radioButton = $("<input>").addClass('s-radio').addClass('m0').attr("type", "radio").attr("id", radioId).attr('name', 'comment-flag-type').attr('value', value);
-	
-	radioButton.click(() => {
-		$(".js-modal-submit.disabled-button").prop("disabled", false).removeClass("disabled-button").css("cursor", "pointer");
-	});
-
-	inputDiv.append(radioButton);
-	subGrid.append(inputDiv);
-
-	const textDiv = $("<div>").addClass('grid--cell').addClass('fl1');
-	const shortText = $("<label>").addClass('d-block').addClass('mb4').addClass('s-label').addClass('fw-normal').attr('for', radioId).text(smolText);
-
-	const longText = $("<label>").addClass('d-block').addClass('mb12').addClass('s-description').addClass('c-pointer').attr('for', radioId).text(bigText);
-
-	textDiv.append(shortText).append(longText);
-	subGrid.append(textDiv);
-	item.append(subGrid);
-
-	return item;
-}
-
-
-
