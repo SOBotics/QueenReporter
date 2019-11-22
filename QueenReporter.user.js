@@ -88,7 +88,8 @@ function addFlagIdListener(preSelector) {
 					$("#modal-base div.ai-center button.js-modal-close")
 						.after($("<label style='margin: 6px;'><input id='queenFeatureThanksPopupRemovalEnabled' type='checkbox' checked='checked'>Popup removal enabled</label>"));
 					
-					addFeedbacks();
+					
+					conditionallyAddFeedbacks(commentId);
 
 					//Manipulate ajax. If the url matches the regex to flag but ends in undefined that means that the custom flag was used.
 					
@@ -125,6 +126,22 @@ function addFlagIdListener(preSelector) {
 `
 
 */
+
+function conditionallyAddFeedbacks(commentId) {
+	let fullURL = "http://api.higgs.sobotics.org/Reviewer/v2/Check?contentId=" + commentId + "&contentSite=" + (new URL(commentUrl)).host + "&contentType=comment"
+	GM.xmlHttpRequest({
+		method: "GET",
+		url: fullURL,
+		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+//		data: "contentUrl=" + encodeURIComponent(commentUrl),
+		onload: function (r) {
+			let reports = JSON.parse(r.responseText);
+			if (reports.length > 0 && reports.some(report => report.dashboard === "Hydrant")) {
+				addFeedbacks();
+			}
+		}
+	});
+}
 
 function addFeedbacks() {
 	const structure = $("<div style='margin-right: 10px;'>Reported by Queen!<br>Feedback: <select id='queen-selected-feedback' style='margin-top: 5px;'></select></div>");
